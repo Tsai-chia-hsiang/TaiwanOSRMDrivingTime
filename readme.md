@@ -1,4 +1,4 @@
-# OpenStreetMap OSMR API To get driving time
+# OpenStreetMap OSRM API To get driving time
 
 This is a project about using python ```routingpy.osrm``` API 
 to get driving distance & driving time from __OpenStreetMap__ data by using osrm API.
