@@ -9,6 +9,11 @@ The class ```Router()``` in file ```calculateDist.py``` is customized for our fi
 
 The mainly useage of the notebook ```script.ipynb``` is for unit execution.
 
+The kit file ```dicttool.py``` is about using 
+```json``` as dict I/O. It is just for convenience
+to deal with .json file rather than writing json method 
+each time whenever needing I/O from .json file.
+
 ### Environment
 python package:
 - routingpy
