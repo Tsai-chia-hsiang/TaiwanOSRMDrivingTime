@@ -98,12 +98,15 @@ def main():
         csvfilepath=os.path.join(".", "cluster_with_coo.csv"),
         region=loadjson(jsonfilepath=os.path.join(".","tw_region.json"))
     )
+
+    resultroot=os.path.join(".","osmdist")
+    if os.path.exists(resultroot):
+        os.mkdir(resultroot)
+    
     router = Router()
     for k in attractions.twregion.keys():
         print(k)
-        if k == 'Taipei':
-            continue
-        savedir = os.path.join("osmdist", f"{k}")
+        savedir = os.path.join(resultroot, f"{k}")
         if not os.path.exists(savedir):
             os.mkdir(savedir)
         
