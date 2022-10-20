@@ -5,11 +5,22 @@ to get driving distance & driving time from __OpenStreetMap__ data by using osrm
 
 In this project, I use osrm to get the driving time and distance about the pairs of Taiwanese toursit attractions. 
 
-The class ```Router()``` in file ```calculateDist.py``` is customized for our file structure.
+#### ```osrmapi.py``` 
+is for calling the api of osrm.
 
-The mainly useage of the notebook ```script.ipynb``` is for unit execution.
+**Note** The class ```Router()``` is customized according to the structure of our dataset.
 
-The kit file ```dicttool.py``` is about using 
+#### ```AttractionData.py```
+is for ineracting with our dataset. 
+
+#### ```calculate_dist.py``` 
+is the main file of this project.
+
+#### ```script.ipynb```
+The mainly useage of this notebook is for unit execution.
+
+#### ```dicttool.py```
+The kit file  is about using 
 ```json``` as dict I/O. It is just for convenience
 to deal with .json file rather than writing json method 
 each time whenever needing I/O from .json file.
@@ -18,6 +29,6 @@ each time whenever needing I/O from .json file.
 python package:
 - routingpy
   
-  **Note: need ```GDAL``` &```geopandas```** package and these 2 may be a little bit hard to setup.
+  **Note: need ```GDAL``` & ```geopandas```** package and these 2 may be a little bit hard to setup.
 - pandas 
 - numpy 
