@@ -1,6 +1,6 @@
 import os
 from dicttool import *
-from AttractionData import AttractionDataset as attrd
+from attractiondata import AttractionDataset as attrd
 from osrmapi import Router
 
 def each_region():
