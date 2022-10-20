@@ -1,3 +1,4 @@
+from ast import main
 from dicttool import *
 import os
 from routingpy import OSRM
@@ -21,7 +22,7 @@ class Router():
             cooslices.append(coolist[i:i+batchsize])
         return idslices, cooslices
 
-    def single_source(self, srcinfo:list, idslices:list, cooslices:list)->dict:
+    def _single_source(self, srcinfo:list, idslices:list, cooslices:list)->dict:
         nodelinks = {}
         batch_count =0
         for Dstidbatch, Coobatch in zip(idslices,cooslices):
@@ -57,7 +58,7 @@ class Router():
                 self.__pbar.set_postfix_str(f"gotten {srcid}")
                 continue
         
-            r = self.single_source([srcid, nodedict[srcid]],idslices, cooslices)
+            r = self._single_source([srcid, nodedict[srcid]],idslices, cooslices)
             writejson(r,resultsave)
         
 
@@ -78,7 +79,7 @@ class attractiondataset():
             diff_region[region] = self.df[self.df['region2'].isin(name['chi2'])]
         return diff_region
 
-    def extract_places_coordinate(self, target_region:str="all")->dict:
+    def extract_places_coordinate(self, target_region:str|list="all")->dict:
         
         def extraction_places_coo(df:pd.DataFrame)->dict:
             placeidlist = df['placeid'].tolist()
@@ -89,10 +90,15 @@ class attractiondataset():
 
         if target_region == "all":
             return extraction_places_coo(self.df)
+        if isinstance(target_region, list):
+            print(target_region)
+            targetdf = pd.concat( list((self.regiondf[t] for t in target_region)))
+            return extraction_places_coo(targetdf)
+        
         return extraction_places_coo(self.regiondf[target_region])
     
 
-def main():
+def each_region():
 
     attractions = attractiondataset(
         csvfilepath=os.path.join(".", "cluster_with_coo.csv"),
@@ -114,16 +120,20 @@ def main():
         pid_coo = attractions.extract_places_coordinate(target_region=k)
         router.routing(pid_coo, savedir, batchsize=250)
 
-
-def testing():
-    client = OSRM(base_url="https://routing.openstreetmap.de/routed-car")
-    r = client.matrix(
-        locations=[[121.50617, 25.24749], [121.51787, 25.28422]],
-        sources=[0]
+def taiwan_main_island():
+    attractions = attractiondataset(
+        csvfilepath=os.path.join(".", "cluster_with_coo.csv"),
+        region=loadjson(jsonfilepath=os.path.join(".","tw_region.json"))
     )
-    print(r.distances)
-    print(r.durations)
+    outlying = ["Penghu", "Kinmen","Lienchiang","Greenisland", "Lanyu"]
+    main_island = list(t for t in attractions.twregion.keys() if t not in outlying )
+    pid_coo = attractions.extract_places_coordinate(target_region=main_island)
+    savedir = os.path.join("osmdist", "Allpair")
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
+    
+    router= Router()
+    router.routing(pid_coo, saveingdir=savedir,batchsize=250)
 
 if __name__ == "__main__":
-    main()
-    #testing()
+    taiwan_main_island()
