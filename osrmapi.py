@@ -47,7 +47,39 @@ class Router():
         return nodelinks
 
     def routing(self, nodedict:dict, saveingdir:os.PathLike,batchsize = 250)->None:
+        """
+        ### Parameters:
+
+        - nodedict:
+            The dict about query nodes.
+
+            { nodeid:[node_lng, node_lat], .... }
         
+        - saveingdir:
+            The path of result saving.   
+
+            Note that the result of Each node will be
+            store to saveingdir/nodeid.json
+
+        ### result :
+        Seeing saveingdir/nodeid.json:
+
+        Each nodeid.json stores the driving time & distances
+        to the destinations.
+
+        ```
+        source0id.json:
+
+        {
+            dst0nodeid:{
+                'time':secs,
+                'dist':meters
+            }, 
+            dat1nodeid: ...
+        }
+        ```
+        
+        """
         idslices , cooslices= self._gen_batch(nodedict, batchsize)
         self.__pbar = tqdm(list(nodedict.keys()))
         for i, srcid in enumerate(self.__pbar):
