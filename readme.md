@@ -10,7 +10,7 @@ is for calling the api of osrm.
 
 **Note** The class ```Router()``` is customized according to the structure of our dataset.
 
-#### ```AttractionData.py```
+#### ```attractiondata.py```
 is for ineracting with our dataset. 
 
 #### ```calculate_dist.py``` 
