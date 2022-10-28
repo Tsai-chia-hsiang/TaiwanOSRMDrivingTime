@@ -13,6 +13,13 @@ class AttractionDataset():
     def write_data(df, writingpath)->None:
         df.to_csv(writingpath, encoding='utf-8', index=False)
 
+    def getpath(self, path, targetcol = ['name','description','0','1','2','3','4','5'])->pd.DataFrame:
+        attri = self.df[self.df['placeid'].isin(path)][targetcol]
+        return attri
+
+    def get_attraction(self, placeid, targetcol)->pd.DataFrame:
+        return self.df[self.df['placeid']==placeid][targetcol]
+
     def __divide_according_regions(self)->dict:
         diff_region = {}
         for region, name in self.twregion.items():
@@ -31,7 +38,7 @@ class AttractionDataset():
         if target_region == "all":
             return extraction_places_coo(self.df)
         if isinstance(target_region, list):
-            print(target_region)
+            #print(target_region)
             targetdf = pd.concat( list((self.regiondf[t] for t in target_region)))
             return extraction_places_coo(targetdf)
         
