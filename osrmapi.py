@@ -1,4 +1,6 @@
-from dicttool import *
+import sys
+sys.path.append("..")
+from utils.dicttool import *
 import os
 from routingpy import OSRM
 from tqdm import tqdm

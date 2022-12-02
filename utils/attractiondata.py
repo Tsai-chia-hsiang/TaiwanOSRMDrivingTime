@@ -1,30 +1,36 @@
 import os
 import pandas as pd
 
-
 class AttractionDataset():
 
-    def __init__(self, csvfilepath:os.PathLike, region:dict) -> None:
+    def __init__(self, csvfilepath:os.PathLike) -> None:
         self.df = pd.read_csv(csvfilepath)
-        self.twregion = region
-        self.regiondf = self.__divide_according_regions()        
+        self.region = None
+        self.regiondf = None
     
-    @staticmethod
-    def write_data(df, writingpath)->None:
-        df.to_csv(writingpath, encoding='utf-8', index=False)
+    def divide_according_regions(self, region:dict)->None:
+        self.region = region
+        diff_region = {}
+        for region, name in self.region.items():
+            diff_region[region] = self.df[self.df['region2'].isin(name['chi2'])]
+        self.regiondf = diff_region
+
 
     def getpath(self, path, targetcol = ['name','description','0','1','2','3','4','5'])->pd.DataFrame:
-        attri = self.df[self.df['placeid'].isin(path)][targetcol]
-        return attri
+        path_ = []
+        for pi in path:
+            path_.append(self.df[self.df['placeid']==pi][targetcol])
+        
+        return pd.concat(path_)
 
     def get_attraction(self, placeid, targetcol)->pd.DataFrame:
         return self.df[self.df['placeid']==placeid][targetcol]
-
-    def __divide_according_regions(self)->dict:
-        diff_region = {}
-        for region, name in self.twregion.items():
-            diff_region[region] = self.df[self.df['region2'].isin(name['chi2'])]
-        return diff_region
+    
+    def get_picurl(self, placeid)->list:
+        picurl = self.df.loc[
+            self.df.placeid == placeid
+        ][['pic0','pic1','pic2']].dropna(axis=1).values.tolist()
+        return picurl
 
     def extract_places_coordinate(self, target_region:str|list="all")->dict:
         

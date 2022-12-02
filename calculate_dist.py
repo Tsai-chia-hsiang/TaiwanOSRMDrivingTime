@@ -1,13 +1,15 @@
 import os
-from dicttool import *
-from attractiondata import AttractionDataset as attrd
+import sys
+from utils.dicttool import *
+from utils.attractiondata import AttractionDataset as attrd
 from osrmapi import Router
 
 
 def each_region():
-
     attractions = attrd(
-        csvfilepath=os.path.join(".", "cluster_with_coo.csv"),
+        csvfilepath=os.path.join("..", "Attractiondata", "cluster_with_coo.csv"),
+    )
+    attractions.divide_according_regions(
         region=loadjson(jsonfilepath=os.path.join(".","tw_region.json"))
     )
 
@@ -28,9 +30,9 @@ def each_region():
 
 def taiwan_main_island():
     attractions = attrd(
-        csvfilepath=os.path.join(".", "cluster_with_coo.csv"),
-        region=loadjson(jsonfilepath=os.path.join(".","tw_region.json"))
+        csvfilepath=os.path.join("..", "Attractiondata", "cluster_with_coo.csv"),
     )
+    attractions.divide_according_regions(region=loadjson(jsonfilepath=os.path.join(".","tw_region.json")))
 
 
     outlying = ["Penghu", "Kinmen","Lienchiang","Greenisland", "Lanyu"]
